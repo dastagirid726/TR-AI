@@ -1,0 +1,227 @@
+# BuildSmart AI - Construction Cost Prediction Application
+
+## Project Overview
+Build a modern full-stack construction cost prediction and design platform called "BuildSmart AI" that helps architects, contractors, and project managers estimate construction costs, generate designs, and manage projects efficiently.
+
+## Tech Stack
+- **Frontend**: Next.js 14+ with React 18+, TypeScript, TailwindCSS
+- **State Management**: Zustand for auth and project state
+- **API Client**: Axios with interceptors for JWT token handling
+- **Build Tools**: Next.js with proper environment configuration
+
+## Core Features
+
+### 1. Authentication System
+- User registration with fields: Full Name, Email, Password, Role (Individual, Contractor, Architect, Engineer)
+- User login with email and password
+- JWT token-based authentication
+- Protected routes - redirect to login if not authenticated
+- Token stored in localStorage
+- Automatic token inclusion in all API requests via Authorization header
+
+### 2. Dashboard
+- Welcome banner with user greeting
+- Key metrics cards showing:
+  - Total Projects (12)
+  - Estimated Savings ($45,000)
+  - Average Cost per sqft ($125)
+  - Risk Score (Low/Medium/High)
+- Quick action buttons grid with emojis:
+  - 💰 Cost Estimator
+  - 🎨 Design Studio
+  - 🤖 AI Assistant
+  - 📅 Timeline Predictor
+  - ⚠️ Risk Analysis
+  - 📋 BOQ Generator
+- Recent Projects section with create project button
+
+### 3. Project Management
+#### Create Project Page
+Form with sections:
+- **Project Information**: Project Name
+- **Location**: Country, State/Province, City, Postal Code, Locality
+- **Area Details**: Plot Area (sqft), Construction Area (sqft)
+- **Building Details**: 
+  - Building Type dropdown (Residential, Villa, Apartment, Commercial, Industrial, Warehouse)
+  - Number of Floors (spinner)
+  - Material Type dropdown (Concrete, Wood, Steel, Hybrid)
+  - Design Style dropdown (Modern, Luxury, Traditional, Contemporary, Industrial)
+- **Budget**: Optional budget field
+- Create and Cancel buttons
+
+#### Project Detail Page
+Display created project information with:
+- Project title and Edit/Delete buttons
+- Project Details card (Building Type, Floors, Material, Design Style)
+- Area & Location card (Plot Area, Construction Area, City, Country)
+- Cost & Timeline card (Budget, Estimated Cost, Timeline)
+- Dates card (Created, Updated)
+- Project Tools section with buttons:
+  - 🎨 Design Studio
+  - 💰 Cost Estimator
+  - 📅 Timeline Planner
+- Back to Dashboard button
+
+### 4. Design Studio
+#### Design Parameters Form
+- Plot Area (sqft) - input number
+- Construction Area (sqft) - input number
+- Building Type - dropdown
+- Floors - spinner input
+- Design Style - dropdown
+- Include 3D Visualization - checkbox
+- Generate Design button
+
+#### Design Results Display
+Show after generation:
+- 2D Floor Plan - image display
+- 3D Building Visualization - image display
+- Interior Layout - image display
+- Design Metadata section with:
+  - Design Style
+  - Building Type
+  - Total Construction Area
+  - Total Floors
+- Floor Details section:
+  - Ground Floor with room list showing room name and dimensions (length × width)
+  - Upper Floors with similar room details
+  - Rooms display with consistent styling in grid/list format
+
+### 5. Cost Estimator Page
+- Input form for construction area and building parameters
+- Calculate button to trigger cost prediction
+- Display estimated cost breakdown:
+  - Total estimated cost
+  - Material cost percentage
+  - Labor cost percentage
+  - Equipment cost percentage
+- Show cost per square foot
+
+### 6. Additional Feature Pages (Functional Shells)
+- **AI Assistant Page**: Chat interface for construction questions
+- **Timeline Predictor Page**: Timeline estimation form and results
+- **Risk Analysis Page**: Risk assessment form and risk level indicators
+- **BOQ Generator Page**: Generate Bill of Quantities with itemized breakdown
+
+## API Integration
+
+### Authentication Endpoints
+- `POST /api/v1/auth/register` - User registration
+- `POST /api/v1/auth/login` - User login (returns JWT token)
+- `GET /api/v1/auth/me` - Get current user info
+
+### Project Endpoints
+- `POST /api/v1/projects` - Create project
+- `GET /api/v1/projects/` - List all projects
+- `GET /api/v1/projects/{id}` - Get project details
+- `PUT /api/v1/projects/{id}` - Update project
+- `DELETE /api/v1/projects/{id}` - Delete project
+
+### Design Endpoints
+- `POST /api/v1/design/generate` - Generate design with parameters
+
+### Analysis Endpoints
+- `POST /api/v1/cost/predict` - Predict construction cost
+- `POST /api/v1/timeline/predict` - Predict project timeline
+- `POST /api/v1/risk/analyze` - Analyze project risks
+- `POST /api/v1/boq/generate` - Generate Bill of Quantities
+- `POST /api/v1/chat/ask` - AI assistant chat
+
+## UI/UX Requirements
+
+### Design System
+- **Color Scheme**: Professional with blue/gray tones for primary, red for alerts
+- **Layout**: Responsive grid layout that works on desktop, tablet, and mobile
+- **Navigation**: Header with logo, navigation links, and user profile menu
+- **Cards**: Use card components for sections with proper spacing and shadows
+- **Forms**: Consistent styling with labels, input validation, and error messages
+- **Buttons**: Primary (blue) and secondary (gray) button styles with hover effects
+
+### Components to Create
+- Header/Navigation component
+- Sidebar (if needed) or top navigation
+- Card component for grouping content
+- Input component with label and validation
+- Select/Dropdown component
+- Button component with variants
+- Form component with validation
+- Data grid/table for displaying project lists
+- Image gallery for design results
+- Modal/Dialog for confirmations
+
+### Pages to Create
+1. `/` - Redirect to dashboard or landing
+2. `/login` - Login page
+3. `/register` - Registration page
+4. `/dashboard` - Main dashboard
+5. `/projects/new` - Create project
+6. `/projects/{id}` - Project details
+7. `/cost-estimator` - Cost estimation
+8. `/design-studio` - Design generation
+9. `/timeline` - Timeline predictor
+10. `/risk-analysis` - Risk analysis
+11. `/boq` - BOQ generator
+12. `/ai-assistant` - AI assistant chat
+
+## Data Models
+
+### User
+- id: number
+- full_name: string
+- email: string
+- role: string (Individual, Contractor, Architect, Engineer)
+- created_at: timestamp
+
+### Project
+- id: number
+- project_name: string
+- user_id: number
+- country: string
+- state: string
+- city: string
+- postal_code: string
+- locality: string
+- plot_area: number
+- construction_area: number
+- building_type: string
+- floors: number
+- material_type: string
+- design_style: string
+- budget: number (optional)
+- created_at: timestamp
+- updated_at: timestamp
+
+### Design
+- id: number
+- project_id: number
+- floor_plan_url: string
+- exterior_concept_url: string
+- interior_concept_url: string
+- design_style: string
+- design_metadata: object (style, building_type, total_area, total_floors)
+- ground_floor: object (rooms with dimensions)
+- upper_floors: array of floor objects
+- created_at: timestamp
+
+## Styling & Theme
+- Dark mode support with TailwindCSS dark: prefix
+- Professional gradient backgrounds
+- Smooth transitions and animations
+- Responsive breakpoints (mobile, tablet, desktop)
+- Accessible contrast ratios
+- Consistent spacing and typography
+
+## Performance Requirements
+- Lazy load images in design results
+- Optimize component rendering with React.memo where needed
+- Efficient API calls with proper loading states
+- Cache user data appropriately
+- Handle network errors gracefully with user-friendly messages
+
+## Additional Notes
+- All forms should have proper validation and error handling
+- Show loading states during API calls
+- Display success/error notifications for user actions
+- Implement proper error boundaries
+- Add loading skeletons for better UX
+- Support dark/light theme toggle
